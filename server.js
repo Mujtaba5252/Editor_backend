@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Document = require("./DocumentSchema");
+// require("dotenv").config();
+
 mongoose.connect(
   "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/GoogleDocs?retryWrites=true&w=majority",
 
@@ -8,7 +10,7 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 );
-const io = require("socket.io")(process.env.PORT, {
+const io = require("socket.io")(process.env.PORT || 3001, {
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],

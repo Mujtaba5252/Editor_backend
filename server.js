@@ -1,32 +1,48 @@
+const express = require("express");
 const mongoose = require("mongoose");
+const SocketIO = require("socket.io");
 const Document = require("./DocumentSchema");
+
+const app = express();
+
+// Connect to the database
 mongoose.connect("mongodb://localhost:27017/google-docs-clone", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-const io = require("socket.io")(3001, {
-  cors: {
-    origin: "https://master--paleditor.netlify.app/",
-    methods: ["GET", "POST"],
-  },
+
+// Create a Socket.IO server
+const io = SocketIO(app.listen(3001));
+
+// Add a middleware to handle the Socket.IO connection
+app.use((req, res, next) => {
+  req.io = io;
+  next();
 });
 
-const defaultValue = "";
+// Add a route to handle the `get-document` event
+app.get("/get-document/:documentId", async (req, res) => {
+  // Get the document ID from the request parameters
+  const documentId = req.params.documentId;
 
-io.on("connection", (socket) => {
-  socket.on("get-document", async (documentId) => {
-    const document = await findOrCreateDocument(documentId);
-    socket.join(documentId);
-    socket.emit("load-document", document.data);
+  // Find or create the document
+  const document = await findOrCreateDocument(documentId);
 
-    socket.on("send-changes", (delta) => {
-      socket.broadcast.to(documentId).emit("receive-changes", delta);
-    });
+  // Join the Socket.IO room for the document
+  req.io.join(documentId);
 
-    socket.on("save-document", async (data) => {
-      await Document.findByIdAndUpdate(documentId, { data });
-    });
-  });
+  // Emit the `load-document` event to the client
+  req.io.emit("load-document", document.data);
+
+  // Send the response to the client
+  res.send("Document loaded successfully");
+});
+
+// Move your existing code for handling the `send-changes` and `save-document` events into the Express route handler.
+
+// Start the Express server
+app.listen(5173, () => {
+  console.log("Express server listening on port 5173");
 });
 
 async function findOrCreateDocument(id) {

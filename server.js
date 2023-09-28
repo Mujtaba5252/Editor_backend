@@ -7,7 +7,7 @@ const app = express();
 
 // Connect to the database
 mongoose.connect(
-  "mongodb+srv://mujtabainfini8ai:HNf8rJrUFgguwnSd@cluster0.lkh2bx0.mongodb.net/?retryWrites=true&w=majority/google-docs-clone",
+  "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/google-docs-clone?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -15,7 +15,7 @@ mongoose.connect(
 );
 
 // Create a Socket.IO server
-const io = SocketIO(app.listen(3001));
+const io = SocketIO(app.listen(3000));
 
 // Add a middleware to handle the Socket.IO connection
 app.use((req, res, next) => {
@@ -44,7 +44,7 @@ app.get("/get-document/:documentId", async (req, res) => {
 // Move your existing code for handling the `send-changes` and `save-document` events into the Express route handler.
 
 // Start the Express server
-app.listen(5173, () => {
+app.listen(3000, () => {
   console.log("Express server listening on port 5173");
 });
 

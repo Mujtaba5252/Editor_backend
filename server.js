@@ -26,7 +26,10 @@ io.on("connection", (socket) => {
     socket.emit("load-document", document.data);
 
     socket.on("send-changes", (delta) => {
-      socket.broadcast.to(documentId).emit("receive-changes", delta);
+      // Add a delay of 100 milliseconds
+      setTimeout(() => {
+        socket.broadcast.to(documentId).emit("receive-changes", delta);
+      }, 100);
     });
 
     socket.on("save-document", async (data) => {

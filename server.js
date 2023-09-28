@@ -6,10 +6,13 @@ const Document = require("./DocumentSchema");
 const app = express();
 
 // Connect to the database
-mongoose.connect("mongodb://localhost:27017/google-docs-clone", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://mujtabainfini8ai:HNf8rJrUFgguwnSd@cluster0.lkh2bx0.mongodb.net/?retryWrites=true&w=majority/google-docs-clone",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 // Create a Socket.IO server
 const io = SocketIO(app.listen(3001));

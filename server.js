@@ -8,7 +8,7 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 );
-const io = require("socket.io")(3001, {
+const io = require("socket.io")(process.env.PORT, {
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],

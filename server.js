@@ -6,7 +6,7 @@ mongoose.connect("mongodb://localhost:27017/google-docs-clone", {
 });
 const io = require("socket.io")(3001, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://master--paleditor.netlify.app/",
     methods: ["GET", "POST"],
   },
 });

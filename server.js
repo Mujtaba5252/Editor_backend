@@ -6,7 +6,7 @@ const Document = require("./DocumentSchema");
 const defaultValue = "";
 
 mongoose.connect(
-  "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/GoogleDocs?retryWrites=true&w=majority",
+  "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/EDITOR?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -28,8 +28,7 @@ wss.on("connection", (ws) => {
 
       const document = await findOrCreateDocument(documentId);
       ws.send(JSON.stringify({ type: "load-document", data: document.data }));
-      // Join a room (document) based on the documentId
-      ws.documentId = documentId;
+      ws.join(documentId);
     } else if (data.type === "save-document") {
       await Document.findByIdAndUpdate(documentId, { data: data.content });
     } else if (data.type === "send-changes") {

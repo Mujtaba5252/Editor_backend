@@ -12,8 +12,8 @@ mongoose.connect(
 );
 const io = require("socket.io")(process.env.PORT || 3001, {
   cors: {
-    // origin: "https://editor-frontend-nu.vercel.app",
-    origin: "http://localhost:5173",
+    origin: "https://editor-frontend-nu.vercel.app",
+    // origin: "http://localhost:5173",
     methods: ["GET", "POST", "OPTIONS"],
   },
 });

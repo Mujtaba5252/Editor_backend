@@ -17,6 +17,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server, path: "/ws" });
 
+// ...
 wss.on("connection", (ws) => {
   let documentId;
 
@@ -28,18 +29,23 @@ wss.on("connection", (ws) => {
 
       const document = await findOrCreateDocument(documentId);
       ws.send(JSON.stringify({ type: "load-document", data: document.data }));
-      ws.join(documentId);
+      // Join a room (document) based on the documentId
+      ws.documentId = documentId;
     } else if (data.type === "save-document") {
       await Document.findByIdAndUpdate(documentId, { data: data.content });
     } else if (data.type === "send-changes") {
+      // Broadcast changes to all clients in the same document (room)
       wss.clients.forEach((client) => {
-        if (client !== ws && client.room === documentId) {
-          client.send(JSON.stringify({ type: "receive-changes", data: data.content }));
+        if (client !== ws && client.documentId === documentId) {
+          client.send(
+            JSON.stringify({ type: "receive-changes", data: data.content })
+          );
         }
       });
     }
   });
 });
+// ...
 
 async function findOrCreateDocument(id) {
   if (id == null) return;

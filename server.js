@@ -12,8 +12,8 @@ mongoose.connect(
 );
 const io = require("socket.io")(process.env.PORT || 3001, {
   cors: {
-    origin: "https://editor-frontend-nu.vercel.app",
-    // origin: "http://localhost:5173",
+    // origin: "https://editor-frontend-nu.vercel.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "OPTIONS"],
   },
 });
@@ -26,7 +26,6 @@ io.on("connection", (socket) => {
       await Document.findByIdAndUpdate(documentId, { data });
     });
     socket.on("send-changes", (delta) => {
-      // Add a delay of 100 milliseconds
       socket.broadcast.to(documentId).emit("receive-changes", delta);
     });
     const document = await findOrCreateDocument(documentId);

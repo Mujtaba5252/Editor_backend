@@ -17,7 +17,6 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server, path: "/ws" });
 
-// ...
 wss.on("connection", (ws) => {
   let documentId;
 
@@ -45,7 +44,6 @@ wss.on("connection", (ws) => {
     }
   });
 });
-// ...
 
 async function findOrCreateDocument(id) {
   if (id == null) return;

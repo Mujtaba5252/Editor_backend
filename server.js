@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 const Document = require("./DocumentSchema");
+const cors = require("cors");
 // require("dotenv").config();
-
+const express = require("express");
+const app = express();
+app.use(cors());
 mongoose.connect(
   "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/GoogleDocs?retryWrites=true&w=majority",
 
@@ -20,7 +23,6 @@ const io = require("socket.io")(process.env.PORT || 3001, {
 //cors error solution
 // const cors = require("cors");
 // app.use(cors());
-
 
 const defaultValue = "";
 

@@ -1,16 +1,24 @@
 const mongoose = require("mongoose");
 const Document = require("./DocumentSchema");
-// require("dotenv").config();
+const express = require("express");
+const cors = require("cors"); // Import the cors package
+
+const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
 
 mongoose.connect(
   "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/GoogleDocs?retryWrites=true&w=majority",
-
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }
 );
-const io = require("socket.io")(process.env.PORT || 3001, {
+
+const httpServer = require("http").createServer(app); // Create an HTTP server
+
+const io = require("socket.io")(httpServer, {
   cors: {
     // origin: "https://editor-frontend-nu.vercel.app",
     origin: "http://localhost:3000",
@@ -41,3 +49,8 @@ async function findOrCreateDocument(id) {
   if (document) return document;
   return await Document.create({ _id: id, data: defaultValue });
 }
+
+const port = process.env.PORT || 3001;
+httpServer.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

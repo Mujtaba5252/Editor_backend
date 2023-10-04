@@ -3,6 +3,14 @@ const Document = require("./DocumentSchema");
 const cors = require("cors");
 // require("dotenv").config();
 const express = require("express");
+const io = require("socket.io");
+const port = process.env.PORT || 3001;
+const newSocket = io(port, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "OPTIONS"],
+  },
+});
 const app = express();
 app.use(cors());
 mongoose.connect(
@@ -13,20 +21,13 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 );
-const io = require("socket.io")(process.env.PORT || 3001, {
-  cors: {
-    // origin: "https://editor-frontend-nu.vercel.app",
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "OPTIONS"],
-  },
-});
-//cors error solution
-// const cors = require("cors");
-// app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const defaultValue = "";
 
-io.on("connection", (socket) => {
+newSocket.on("connection", (socket) => {
   socket.on("get-document", async (documentId) => {
     socket.on("save-document", async (data) => {
       await Document.findByIdAndUpdate(documentId, { data });

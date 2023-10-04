@@ -41,7 +41,7 @@ newSocket.on("connection", (socket) => {
     });
     const document = await findOrCreateDocument(documentId);
     socket.join(documentId);
-    socket.emit("load-document", document.data);
+    socket.emit("load-document", document?.data);
   });
 });
 

@@ -1,21 +1,25 @@
 const mongoose = require("mongoose");
 const Document = require("./DocumentSchema");
 const cors = require("cors");
-// require("dotenv").config();
 const express = require("express");
-const io = require("socket.io");
+const http = require("http"); // Import http module
+const { Server } = require("socket.io"); // Import Server from socket.io
+
 const port = process.env.PORT || 3001;
-const newSocket = io(port, {
+const app = express();
+const server = http.createServer(app); // Create an HTTP server using express app
+const newSocket = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "OPTIONS"],
   },
 });
-const app = express();
+
+// Enable CORS for your Express app
 app.use(cors());
+
 mongoose.connect(
   "mongodb+srv://mujtabainfini8ai:x5FXvNdltLzWAT8K@mujtabacluster.uhfjm4w.mongodb.net/GoogleDocs?retryWrites=true&w=majority",
-
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -48,3 +52,7 @@ async function findOrCreateDocument(id) {
   if (document) return document;
   return await Document.create({ _id: id, data: defaultValue });
 }
+
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
